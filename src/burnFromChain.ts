@@ -38,7 +38,6 @@ const getBurnAmount = async (searchNumber: Number) => {
                             (transfer: BonkTx) => 
                             transfer.mint === BONK_MINT 
                             && transfer.toUserAccount === '')[0];
-                        console.log('bonkTx', bonkTx);
                         if (bonkTx) {
                             return bonkTx.tokenAmount;
                         } else {
@@ -62,7 +61,6 @@ const isMintNumber = async (mint: String, searchNumber: Number) =>
   const { data } = await axios.post(url, { mintAccounts: [mint]})
   const name = data[0].onChainData.data.name
 	const mintNumber = Number(name.match(/#(\d+)/)[1])
-	console.log('comparing', mintNumber, searchNumber)
 	return mintNumber === searchNumber;
 }
 //parseTransactions();
