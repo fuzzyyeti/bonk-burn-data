@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { getTotalMinted } from './getTotal';
 //const ADMIN='2caMPE832jAJfrbQdGXYtDWyYaqfg2umgh4cN56QgUAG'
 const ADMIN='9Ccz6i4DhCMBzTSkTufRbhkNSd8ySVgns7wJco3cjeU7'
 const BONK_MINT='DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'
@@ -26,6 +27,9 @@ export const getBurnFromChain = async (nftNumber: number) => {
 //     tokenStandard: 'Fungible'
 //   },
 const getBurnAmount = async (searchNumber: Number) : Promise<number | null> => {
+  if( searchNumber > await getTotalMinted()) {
+    return null;
+  }
   while (true) {
     const { data } = await axios.get(url)
     let x = 0;

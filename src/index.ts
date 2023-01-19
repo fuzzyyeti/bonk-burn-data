@@ -23,7 +23,9 @@ let burnAmount :number | null = 0;
 if (burnAmounts[itemNum] === undefined) {
   
   burnAmount = await getBurnFromChain(itemNum);
-  burnAmounts[itemNum] = burnAmount;
+  if (burnAmount !== null) {
+    burnAmounts[itemNum] = burnAmount;
+  }
   console.log('retrieved from chain');
   fs.writeFileSync(`${base_path}/static/bonkburned.json`, JSON.stringify(burnAmounts)); 
 } else {
