@@ -25,7 +25,7 @@ export const getBurnFromChain = async (nftNumber: number) => {
 //     mint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263',
 //     tokenStandard: 'Fungible'
 //   },
-const getBurnAmount = async (searchNumber: Number) => {
+const getBurnAmount = async (searchNumber: Number) : Promise<number | null> => {
   while (true) {
     const { data } = await axios.get(url)
     let x = 0;
@@ -53,12 +53,16 @@ const getBurnAmount = async (searchNumber: Number) => {
     }
     x++;
   }
+  return null;
 }
 
 const isMintNumber = async (mint: String, searchNumber: Number) =>
 {
 	const url = `https://api.helius.xyz/v0/tokens/metadata?api-key=${process.env.API_KEY}`
   const { data } = await axios.post(url, { mintAccounts: [mint]})
+  if (data[0].onChainData === null) {
+    return false;
+  }
   const name = data[0].onChainData.data.name
 	const mintNumber = Number(name.match(/#(\d+)/)[1])
 	return mintNumber === searchNumber;
