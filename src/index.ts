@@ -3,12 +3,15 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import { getBurnFromChain } from './burnFromChain';
 import nodeHtmlToImage from 'node-html-to-image';
+import cors from 'cors';
 
 const base_path = __dirname.split('/').slice(0, -1).join('/');
 const app = express()
 const port = 3001
 const img = 'https://shdw-drive.genesysgo.net/4EVCAGfgf62Dm3bmd2e6L7BnqKZP2jmuXUtufWND12oo/'
 let burnAmounts : null | { [index : string]: number | null} = null;
+
+app.use(cors());
 
 const getBurnAmount = async (itemNum: number) => {
  // read in metadata from the file
