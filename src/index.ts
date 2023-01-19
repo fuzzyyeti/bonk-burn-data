@@ -2,6 +2,7 @@ import express from 'express';
 import { Request, Response } from 'express';
 import fs from 'fs';
 import { getBurnFromChain } from './burnFromChain';
+import nodeHtmlToImage from 'node-html-to-image';
 
 const base_path = __dirname.split('/').slice(0, -1).join('/');
 const app = express()
@@ -39,7 +40,7 @@ app.get('/index.css', (req: Request, res: Response) => {
   res.sendFile('static/index.css', { root: base_path });
 });
 
-app.get('/:item_num.html', async (req: Request, res: Response) => {
+app.get('/:item_num.png', async (req: Request, res: Response) => {
   const burnAmount = await getBurnAmount(Number(req.params.item_num));
   if (burnAmount === null) {
     res.status(404).send('No image found for item ' + req.params.item_num)
@@ -49,12 +50,42 @@ app.get('/:item_num.html', async (req: Request, res: Response) => {
   const parsedMetadata = JSON.parse(metadata);
   const bg = parsedMetadata.attributes.filter(
     (attr: {trait_type: string, value: any}) => attr.trait_type === 'Backgrounds')[0].value as string;
-  res.send(`<html>
-  <meta name="viewport" content="width=10, initial-scale=4" />
-  <link rel="stylesheet" href="/index.css" />
-  <body><img class="image" src="${img + req.params.item_num + '.png'}" />
-  <div class="scroll-container">
-  <div style="color:${bg === 'Space' ? 'white' : 'black'};" id="scroll-text" >${burnAmount.toLocaleString('en-US')} $BONK Burned!</div></div></body></html>`)
+	const imageFileName = `/static/images/${req.params.item_num}.png`
+	if(!fs.existsSync(base_path.concat(imageFileName))) {
+		const htmlContents = `<html>
+		<head>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+		<style>
+		body {
+			width: 1000px;
+			height: 1000px;
+		}
+		.image {
+			overflow: hidden;
+		}
+		#scroll-text {
+			position: absolute;
+			top: 805px;
+			margin: auto;
+			text-align: center;
+			width: 1000px;
+			font-size: 74px;
+			font-family: 'Fredoka One', cursive;
+			/* animation properties */
+			white-space: nowrap;
+		}
+		</style>
+		</head>
+		<body><img class="image" src="${img + req.params.item_num + '.png'}" />
+		<div style="color:${bg === 'Space' ? 'white' : 'black'};" id="scroll-text" >${burnAmount.toLocaleString('en-US')} <br> $BONK Burned!</div></body></html>`
+		await nodeHtmlToImage({
+			output: base_path.concat(imageFileName),
+			html: htmlContents
+		});
+	}
+  res.sendFile(imageFileName, { root: base_path});
 })
 
 

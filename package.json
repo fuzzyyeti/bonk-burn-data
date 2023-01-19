@@ -7,7 +7,8 @@
     "axios": "^1.2.2",
     "bn.js": "^5.2.1",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-html-to-image": "^3.3.0"
   },
   "scripts": {
     "start": "nodemon --ignore static/bonkburned.json src/index.ts",

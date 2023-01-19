@@ -1,32 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 
-.scroll-container {
-  position: absolute;
-  top: 765px;
-  overflow: hidden;
-  height: 200px;
-  width: 990px;
-}
-
-
 .image {
   overflow: hidden;
 }
 
 #scroll-text {
-  font-size: 175px;
+	position: absolute;
+	top: 840px;
+	margin: auto;
+	text-align: center;
+	width: 1000px;
+  font-size: 60px;
   font-family: 'Fredoka One', cursive;
   /* animation properties */
-  transform: translateX(100%);
   white-space: nowrap;
-  animation: my-animation 15s linear infinite;
 }
 
-@keyframes my-animation {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(-250%);
-  }
-}
