@@ -12,6 +12,7 @@ const img = 'https://shdw-drive.genesysgo.net/4EVCAGfgf62Dm3bmd2e6L7BnqKZP2jmuXU
 let burnAmounts : null | { [index : string]: number | null} = null;
 
 app.use(cors());
+app.use(express.json());
 
 const getBurnAmount = async (itemNum: number) => {
  // read in metadata from the file
@@ -47,6 +48,7 @@ app.post("/mint", (req : Request, res: Response) => {
     res.sendStatus(500).send("wrong event type");
 	}
 	console.log(body);
+	res.send('success');
 });
 
 app.get('/index.css', (req: Request, res: Response) => {
