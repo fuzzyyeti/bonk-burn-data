@@ -39,6 +39,16 @@ if (burnAmounts[itemNum] === undefined) {
 return burnAmount;
 }
 
+app.post("/mint", (req : Request, res: Response) => {
+	console.log(req.body)
+  const { body } = req;
+  const data = body[0];
+  if (data.type !== "NFT_MINT") {
+    res.sendStatus(500).send("wrong event type");
+	}
+	console.log(body);
+});
+
 app.get('/index.css', (req: Request, res: Response) => {
   res.sendFile('static/index.css', { root: base_path });
 });
