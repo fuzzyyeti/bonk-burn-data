@@ -10,5 +10,6 @@ const testTransaction = async (transaction: string) => {
 	const url = `https://api.helius.xyz/v0/transactions?api-key=${process.env.API_KEY}`
 	const { data } = await axios.post(url, { transactions: [transaction]})
 	console.log(JSON.stringify(data))
+	//await axios.post('https://metadata.mintbubble.xyz/mint', data) 
 }
 testTransaction(transaction);

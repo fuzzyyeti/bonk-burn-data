@@ -12,19 +12,16 @@ export type EnhancedTransaction = {
 }
 
 export const getMintAndBurn = async (tx : EnhancedTransaction) => {
-      if (tx.type === "NFT_MINT") {
-					const mint = tx.instructions[0].accounts[4];
-					const bonkTx = tx.tokenTransfers.filter(
-							(transfer) => 
-							transfer.mint === BONK_MINT 
-							&& transfer.toUserAccount === '')[0];
-					if (bonkTx) {
-							return {burn: bonkTx.tokenAmount, mint};
-					} else {
-						return { mint: null, burn: null}	
-					}
-			}
-			return {mint: null, burn: null} 
+		const mint = tx.instructions[0].accounts[4];
+		const bonkTx = tx.tokenTransfers.filter(
+				(transfer) => 
+				transfer.mint === BONK_MINT 
+				&& transfer.toUserAccount === '')[0];
+		if (bonkTx) {
+				return {burn: bonkTx.tokenAmount, mint};
+		} else {
+			return { mint: null, burn: null}	
+		}
 }
 
 export const getItemNumber = async (mint: string) => {

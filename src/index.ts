@@ -26,7 +26,7 @@ const processMint = async (data: EnhancedTransaction) => {
 	}
 	const itemNumber = await getItemNumber(mint!);
 	console.log(itemNumber, mint!, burn);
-  const imageSuccess = await createImage(itemNumber, burn!); 
+    const imageSuccess = await createImage(itemNumber, burn!); 
 	console.log('image created successfuly');
 	if (imageSuccess) {
 		console.log(itemNumber, burn)
