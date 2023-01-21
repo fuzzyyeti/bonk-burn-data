@@ -42,8 +42,9 @@ const processMint = async (data: EnhancedTransaction) => {
 
 app.post("/mint", (req : Request, res: Response) => {
   const { body } = req;
+  console.log(JSON.stringify(body))
   const data = body[0];
-  if (data.type !== "NFT_MINT") {
+  if (data.type !== "NFT_MINT" && data.type !== "TOKEN_MINT") {
     res.status(500).send("wrong event type");
 		return;
 	}
