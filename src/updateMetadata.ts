@@ -4,11 +4,14 @@ import dotenv from 'dotenv'
 dotenv.config();
 const COLLECTION_MINT = new PublicKey('9sCMDMcd6ppsfbFaipuzXzpEduQ58KHrdUTeHbWZWfnE');
 
-export const updateMetadata = async (item: number, mint: string) => {
+export const updateMetadata = async (item: number, mint: string, signature: string) => {
 	const connection = new Connection(process.env.RPC!);
 	const metaplex = new Metaplex(connection);
 	const keypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.UPDATE_AUTHORITY!)))
 	metaplex.use(keypairIdentity(keypair));
+	const latestBlockhash = await connection.getLatestBlockhash();
+	await connection.confirmTransaction({signature, ...latestBlockhash}, 'finalized')
+
 	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)}, 
 	{ commitment: 'finalized' });
 	const tx = await metaplex.nfts().update( {
@@ -41,4 +44,3 @@ const verifyCreator = async (mint: string) => {
 	}, { commitment: 'finalized' });
 }
 
-updateMetadata(43, 'AcuRuPdYZNJtCbhfN33ScewNXV62vEcPgahT5aCijFqx')

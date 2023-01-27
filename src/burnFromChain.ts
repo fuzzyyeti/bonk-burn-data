@@ -6,6 +6,7 @@ dotenv.config();
 
 export type EnhancedTransaction = {
 	type: string,
+	signature: string,
 	instructions: { accounts: string[] }[],
 	tokenTransfers: { mint: string, toUserAccount: string, tokenAmount: number }[],
 	events: { nft: any } 

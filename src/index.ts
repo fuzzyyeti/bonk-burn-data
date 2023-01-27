@@ -32,7 +32,7 @@ const processMint = async (data: EnhancedTransaction) => {
 		console.log(itemNumber, burn)
 		await updateImageAndMetadata(itemNumber, burn!);
 		console.log('off-chain image and metadata uploaded')
-		await updateMetadata(itemNumber, mint!);
+		await updateMetadata(itemNumber, mint!, data.signature);
 		console.log('on-chain image and metadata uploaded')
 		return
 	}
