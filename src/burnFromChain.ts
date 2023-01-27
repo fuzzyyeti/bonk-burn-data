@@ -12,7 +12,7 @@ export type EnhancedTransaction = {
 }
 
 export const getMintAndBurn = async (tx : EnhancedTransaction) => {
-		const mint = tx.instructions[0].accounts[4];
+		const mint = tx.instructions[1].accounts[4];
 		const bonkTx = tx.tokenTransfers.filter(
 				(transfer) => 
 				transfer.mint === BONK_MINT 

@@ -9,7 +9,8 @@ export const updateMetadata = async (item: number, mint: string) => {
 	const metaplex = new Metaplex(connection);
 	const keypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.UPDATE_AUTHORITY!)))
 	metaplex.use(keypairIdentity(keypair));
-	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)});
+	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)}, 
+	{ commitment: 'finalized' });
 	const tx = await metaplex.nfts().update( {
 		nftOrSft: nft,
 		uri: `https://shdw-drive.genesysgo.net/${process.env.SHDW_DRIVE!}/${item}.json`,
@@ -40,4 +41,4 @@ const verifyCreator = async (mint: string) => {
 	}, { commitment: 'finalized' });
 }
 
-//updateMetadata(2, '2hctr57rayowuUH5v8C4T3Hqx9HUjZvoEH4Sckf9Qbvb')
+updateMetadata(43, 'AcuRuPdYZNJtCbhfN33ScewNXV62vEcPgahT5aCijFqx')
