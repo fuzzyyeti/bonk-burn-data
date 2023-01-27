@@ -1,5 +1,5 @@
 import { keypairIdentity, Metaplex, OperationOptions } from "@metaplex-foundation/js";
-import { Connection, Keypair, PublicKey, SignatureStatus} from "@solana/web3.js";
+import { Connection, Keypair, PublicKey, GetVersionedTransactionConfig} from "@solana/web3.js";
 import dotenv from 'dotenv'
 dotenv.config();
 const COLLECTION_MINT = new PublicKey('9sCMDMcd6ppsfbFaipuzXzpEduQ58KHrdUTeHbWZWfnE');
@@ -9,8 +9,11 @@ export const updateMetadata = async (item: number, mint: string, signature: stri
 	const metaplex = new Metaplex(connection);
 	const keypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.UPDATE_AUTHORITY!)))
 	metaplex.use(keypairIdentity(keypair));
-	const sig = await connection.getSignatureStatus(signature);
-	if (sig.value?.confirmationStatus !== "finalized") {
+	const sig = await connection.getTransaction(signature, {
+		commitment: 'finalized',
+		maxSupportedTransactionVersion: 0
+	})
+	if (sig === null) {
 		const latestBlockhash = await connection.getLatestBlockhash();
 		await connection.confirmTransaction({signature, ...latestBlockhash}, 'finalized')
 	}
