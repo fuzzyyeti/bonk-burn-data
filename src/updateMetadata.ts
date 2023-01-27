@@ -1,5 +1,5 @@
 import { keypairIdentity, Metaplex, OperationOptions } from "@metaplex-foundation/js";
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey, SignatureStatus} from "@solana/web3.js";
 import dotenv from 'dotenv'
 dotenv.config();
 const COLLECTION_MINT = new PublicKey('9sCMDMcd6ppsfbFaipuzXzpEduQ58KHrdUTeHbWZWfnE');
@@ -9,9 +9,11 @@ export const updateMetadata = async (item: number, mint: string, signature: stri
 	const metaplex = new Metaplex(connection);
 	const keypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.UPDATE_AUTHORITY!)))
 	metaplex.use(keypairIdentity(keypair));
-	const latestBlockhash = await connection.getLatestBlockhash();
-	await connection.confirmTransaction({signature, ...latestBlockhash}, 'finalized')
-
+	const sig = await connection.getSignatureStatus(signature);
+	if (sig.value?.confirmationStatus !== "finalized") {
+		const latestBlockhash = await connection.getLatestBlockhash();
+		await connection.confirmTransaction({signature, ...latestBlockhash}, 'finalized')
+	}
 	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)}, 
 	{ commitment: 'finalized' });
 	const tx = await metaplex.nfts().update( {
