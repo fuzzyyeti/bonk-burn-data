@@ -9,16 +9,8 @@ export const updateMetadata = async (item: number, mint: string, signature: stri
 	const metaplex = new Metaplex(connection);
 	const keypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.UPDATE_AUTHORITY!)))
 	metaplex.use(keypairIdentity(keypair));
-	const sig = await connection.getTransaction(signature, {
-		commitment: 'finalized',
-		maxSupportedTransactionVersion: 0
-	})
-	if (sig === null) {
-		const latestBlockhash = await connection.getLatestBlockhash();
-		await connection.confirmTransaction({signature, ...latestBlockhash}, 'finalized')
-	}
-	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)}, 
-	{ commitment: 'finalized' });
+	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)},
+	{ commitment: 'confirmed' });
 	const tx = await metaplex.nfts().update( {
 		nftOrSft: nft,
 		uri: `https://shdw-drive.genesysgo.net/${process.env.SHDW_DRIVE!}/${item}.json`,
