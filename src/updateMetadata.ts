@@ -11,6 +11,7 @@ export const updateMetadata = async (item: number, mint: string, signature: stri
 	metaplex.use(keypairIdentity(keypair));
 	const nft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(mint)},
 	{ commitment: 'confirmed' });
+	await new Promise(r => setTimeout(r, 10000));
 	const tx = await metaplex.nfts().update( {
 		nftOrSft: nft,
 		uri: `https://shdw-drive.genesysgo.net/${process.env.SHDW_DRIVE!}/${item}.json`,
